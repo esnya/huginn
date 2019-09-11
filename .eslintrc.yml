@@ -2,7 +2,7 @@ env:
   browser: true
 extends:
   - google
-  - plugin:vue/essential
+  - 'plugin:vue/essential'
   - '@vue/prettier'
   - '@vue/typescript'
 parser: vue-eslint-parser
@@ -12,15 +12,13 @@ rules:
   '@typescript-eslint/explicit-function-return-type':
     - error
     - allowExpressions: true
-  '@typescript-eslint/no-object-literal-type-assertion': off
+  '@typescript-eslint/no-object-literal-type-assertion': 'off'
   '@typescript-eslint/no-unused-vars': error
-  '@typescript-eslint/indent': off
+  '@typescript-eslint/indent': 'off'
   prettier/prettier:
     - error
     - endOfLine: lf
       singleQuote: true
       trailingComma: all
-  require-jsdoc: off
-
-  # ToDo
-  new-cap: off
+  require-jsdoc: 'off'
+  new-cap: 'off'

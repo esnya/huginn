@@ -1,0 +1,171 @@
+import Timer from './Timer';
+
+const Timers: Timer[] = [
+  {
+    level: 25,
+    area: 'プロンテラ',
+    field: '南門',
+    name: 'エンジェリング',
+  },
+  {
+    level: 30,
+    area: 'プロンテラ',
+    field: '地下水路2F',
+    name: '黄金盗虫',
+  },
+  {
+    level: 35,
+    area: 'プロンテラ',
+    field: '迷宮の森',
+    name: 'デビルリング',
+  },
+  {
+    level: 40,
+    area: 'プロンテラ',
+    field: '幽霊船',
+    name: 'ドレイク',
+  },
+  {
+    level: 45,
+    area: 'プロンテラ',
+    field: '海底神殿',
+    name: 'ストラウフ',
+  },
+  {
+    level: 50,
+    area: 'ゲフェン',
+    field: 'ゴブリンの森',
+    name: 'ゴブリンリーダー',
+  },
+  {
+    level: 55,
+    area: 'ゲフェン',
+    field: 'ミョルニール',
+    name: 'ミストレス',
+  },
+  {
+    level: 60,
+    area: 'モロク',
+    field: '蟻地獄南部',
+    name: 'マヤー',
+  },
+  {
+    level: 65,
+    area: 'モロク',
+    field: 'ゾクラト砂漠',
+    name: 'フリオニ',
+  },
+  {
+    level: 70,
+    area: 'フェイヨン',
+    field: 'フェイヨンの森',
+    name: 'エドガ',
+  },
+  {
+    level: 73,
+    area: 'モロク',
+    field: 'ピラミッドダンジョン2F',
+    name: 'オシリス',
+  },
+  {
+    level: 76,
+    area: 'フェイヨン',
+    field: 'フェイヨン洞2F',
+    name: '月夜花',
+  },
+  {
+    level: 80,
+    area: 'ゲフェン',
+    field: 'オークの集落',
+    name: 'オークヒーロー',
+  },
+  {
+    level: 80,
+    area: 'ゲフェン',
+    field: 'コボルドの森',
+    name: 'コボルドリーダー',
+  },
+  {
+    level: 83,
+    area: 'ゲフェン',
+    field: 'ゲフェン地下',
+    name: 'ドッペルゲンガー',
+  },
+  {
+    level: 84,
+    area: 'フェイヨン',
+    field: 'フェイヨン南',
+    name: 'アトロス',
+  },
+  {
+    level: 86,
+    area: 'ゲフェン',
+    field: 'オークの洞',
+    name: 'オークロード',
+  },
+  {
+    level: 90,
+    area: '古城',
+    field: 'グラストヘイム外郭',
+    name: 'データルザウルス',
+  },
+  {
+    level: 93,
+    area: '古城',
+    field: '古城',
+    name: 'オウルバロン',
+  },
+  {
+    level: 98,
+    area: '古城',
+    field: 'グラストヘイム騎士団',
+    name: 'ブラッディナイト',
+  },
+  {
+    level: 100,
+    area: '古城',
+    field: 'グラストヘイム本館',
+    name: 'バフォメット',
+  },
+  {
+    level: 100,
+    area: '古城',
+    field: 'グラストヘイム本館',
+    name: '週替りMVP',
+  },
+  {
+    level: 100,
+    area: '古城',
+    field: 'グラストヘイム墓地',
+    name: 'ダークロード',
+  },
+  {
+    level: 110,
+    area: 'アルデバラン',
+    field: '時計塔2F',
+    name: 'タイムホルダー',
+  },
+  {
+    level: 113,
+    area: 'アルデバラン',
+    field: '時計塔地下',
+    name: 'ロメロスペシャル',
+  },
+  {
+    level: 115,
+    area: 'ルティエ',
+    field: 'おもちゃ工場1F',
+    name: 'ストームナイト',
+  },
+  {
+    level: 118,
+    area: 'ルティエ',
+    field: 'ルティエ',
+    name: 'ハティ',
+  },
+].map(v => ({
+  ...v,
+  id: `${v.name}`,
+  timestamp: Date.now(),
+}));
+export default Timers;
