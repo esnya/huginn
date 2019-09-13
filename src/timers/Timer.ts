@@ -1,5 +1,4 @@
 export default interface Timer {
-  id: string;
   timestamp: number;
 
   level: number;

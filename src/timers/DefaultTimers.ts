@@ -1,6 +1,4 @@
-import Timer from './Timer';
-
-const Timers: Timer[] = [
+const DefaultTimers = [
   {
     level: 25,
     area: 'プロンテラ',
@@ -163,9 +161,5 @@ const Timers: Timer[] = [
     field: 'ルティエ',
     name: 'ハティ',
   },
-].map(v => ({
-  ...v,
-  id: `${v.name}`,
-  timestamp: Date.now(),
-}));
-export default Timers;
+];
+export default DefaultTimers;
