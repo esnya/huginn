@@ -1,8 +1,7 @@
 <template lang="pug">
   tr.lighten-5(:class="[color, `${color}--text`]")
     td
-      v-avatar.mr-2(:size="28" v-if="icon")
-        img(:src="icon")
+      timer-icon.mr-3(:name="value.name")
       span {{value.name}}
     td {{value.level}}
     td {{timestampText}}
@@ -13,21 +12,15 @@
         v-btn(small @click="fromNow(120)") 120分後
         v-btn(small @click="charryOver(121)") 繰越121分
         v-btn(small @click="inputDialog = true") 入力
-    v-dialog(:max-width="300" v-model="inputDialog")
-      template(v-slot:activator="{ on }")
-      v-card
-        v-card-title {{value.name}}
-        v-card-text
-          v-text-field(hide-details name="input" type="number" v-model="inputValue" @keypress.enter="set")
-            template(v-slot:append) 分後
-        v-card-actions
-          v-spacer
-          v-btn(color="primary" @click="set") セット
-          v-btn(@click="inputDialog = false") キャンセル
+    input-dialog(:name="value.name" :timerRef="value.ref" v-model="inputDialog")
+    alert-player(:color="color")
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import AlertPlayer from './AlertPlayer.vue';
+import InputDialog from './InputDialog.vue';
+import TimerIcon from './TimerIcon.vue';
 import Timer from '../timers/Timer';
 
 const ColorTable: [number, string][] = [
@@ -37,29 +30,18 @@ const ColorTable: [number, string][] = [
   [3, 'amber'],
 ];
 
-const AlertTable: Record<string, string> = {
-  red: 'https://actions.google.com/sounds/v1/cartoon/cowbell_ringing.ogg',
-  orange: 'https://actions.google.com/sounds/v1/cartoon/strike_hollow_wood.ogg',
-  amber: 'https://actions.google.com/sounds/v1/cartoon/instrument_strum.ogg',
-};
-
-function play(src: string): void {
-  const audio = document.createElement('audio');
-  audio.src = src;
-  audio.play();
-  audio.addEventListener('ended', () => audio.remove());
-}
-
 @Component({
-  components: {},
+  components: {
+    AlertPlayer,
+    InputDialog,
+    TimerIcon,
+  },
 })
 export default class TimerRow extends Vue {
   @Prop({ required: true, type: Object })
   value!: Timer & { ref: firebase.firestore.DocumentReference };
 
-  public icon: string | null = null;
   public inputDialog = false;
-  public inputValue: number | string = 120;
   public now: number = Date.now();
 
   public get dur(): number {
@@ -99,33 +81,12 @@ export default class TimerRow extends Vue {
     });
   }
 
-  public async set(): Promise<void> {
-    this.inputDialog = false;
-    await this.fromNow(Number(this.inputValue));
-  }
-
-  @Watch('value')
-  public async updateIcon(value: Timer): Promise<void> {
-    const { default: icon } = await import(`../assets/${value.name}.png`);
-    this.icon = icon;
-  }
-
-  @Watch('color')
-  public playAlert(color: string, prevColor: string): void {
-    if (color === prevColor) return;
-
-    const src = AlertTable[color];
-    if (!src) return;
-    play(src);
-  }
-
   private unsubscribers: (() => void)[] = [];
   private async created(): Promise<void> {
     const interval = setInterval(() => {
       this.now = Date.now();
     }, 500);
     this.unsubscribers.push(() => clearInterval(interval));
-    await this.updateIcon(this.value);
   }
   private destroyed(): void {
     this.unsubscribers.forEach(f => f());
