@@ -30,6 +30,26 @@
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import Timer from '../timers/Timer';
 
+const ColorTable: [number, string][] = [
+  [-1, 'grey'],
+  [0, 'red'],
+  [1, 'orange'],
+  [3, 'amber'],
+];
+
+const AlertTable: Record<string, string> = {
+  red: 'https://actions.google.com/sounds/v1/cartoon/cowbell_ringing.ogg',
+  orange: 'https://actions.google.com/sounds/v1/cartoon/strike_hollow_wood.ogg',
+  amber: 'https://actions.google.com/sounds/v1/cartoon/instrument_strum.ogg',
+};
+
+function play(src: string): void {
+  const audio = document.createElement('audio');
+  audio.src = src;
+  audio.play();
+  audio.addEventListener('ended', () => audio.remove());
+}
+
 @Component({
   components: {},
 })
@@ -48,11 +68,10 @@ export default class TimerRow extends Vue {
 
   public get color(): string {
     const dur = this.dur;
-    if (dur < -60 * 1000) return 'grey';
-    if (dur < 0) return 'red';
-    if (dur <= 60 * 1000) return 'orange';
-    if (dur <= 3 * 60 * 1000) return 'amber';
-    return 'green';
+
+    const matched = ColorTable.find(([t]) => dur < t * 60 * 1000);
+    if (!matched) return 'green';
+    return matched[1];
   }
 
   private get timestampText(): string {
@@ -89,6 +108,15 @@ export default class TimerRow extends Vue {
   public async updateIcon(value: Timer): Promise<void> {
     const { default: icon } = await import(`../assets/${value.name}.png`);
     this.icon = icon;
+  }
+
+  @Watch('color')
+  public playAlert(color: string, prevColor: string): void {
+    if (color === prevColor) return;
+
+    const src = AlertTable[color];
+    if (!src) return;
+    play(src);
   }
 
   private unsubscribers: (() => void)[] = [];
