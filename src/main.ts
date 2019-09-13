@@ -1,7 +1,7 @@
 import Vue from 'vue';
-import App from './App.vue';
 import vuetify from './plugins/vuetify';
-import 'moment/locale/ja';
+import App from './App.vue';
+import '@mdi/font/css/materialdesignicons.min.css';
 
 Vue.config.productionTip = false;
 
