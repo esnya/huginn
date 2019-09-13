@@ -1,6 +1,9 @@
 <template lang="pug">
   tr.lighten-5(:class="[color, `${color}--text`]")
-    td {{value.name}}
+    td
+      v-avatar.mr-2(:size="28" v-if="icon")
+        img(:src="icon")
+      span {{value.name}}
     td {{value.level}}
     td {{timestampText}}
     td {{value.area}}
@@ -24,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import Timer from '../timers/Timer';
 
 @Component({
@@ -34,6 +37,7 @@ export default class TimerRow extends Vue {
   @Prop({ required: true, type: Object })
   value!: Timer & { ref: firebase.firestore.DocumentReference };
 
+  public icon: string | null = null;
   public inputDialog = false;
   public inputValue: number | string = 120;
   public now: number = Date.now();
@@ -81,12 +85,19 @@ export default class TimerRow extends Vue {
     await this.fromNow(Number(this.inputValue));
   }
 
+  @Watch('value')
+  public async updateIcon(value: Timer): Promise<void> {
+    const { default: icon } = await import(`../assets/${value.name}.png`);
+    this.icon = icon;
+  }
+
   private unsubscribers: (() => void)[] = [];
   private async created(): Promise<void> {
     const interval = setInterval(() => {
       this.now = Date.now();
     }, 500);
     this.unsubscribers.push(() => clearInterval(interval));
+    await this.updateIcon(this.value);
   }
   private destroyed(): void {
     this.unsubscribers.forEach(f => f());
