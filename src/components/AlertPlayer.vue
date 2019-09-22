@@ -11,42 +11,59 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
+import getColor from '../color';
+
+const sounds = [
+  {
+    color: 'red',
+    src: 'https://actions.google.com/sounds/v1/cartoon/cowbell_ringing.ogg',
+  },
+  {
+    color: 'orange',
+    src: 'https://actions.google.com/sounds/v1/cartoon/strike_hollow_wood.ogg',
+  },
+  {
+    color: 'amber',
+    src: 'https://actions.google.com/sounds/v1/cartoon/instrument_strum.ogg',
+  },
+];
+const soundColors = sounds.map(sound => sound.color);
 
 @Component({
   components: {},
 })
 export default class AlertPlayer extends Vue {
-  @Prop({ required: true, type: String }) color!: string;
+  @Prop({ required: true, type: Number }) dur!: number;
 
-  public readonly sounds = [
-    {
-      color: 'red',
-      src: 'https://actions.google.com/sounds/v1/cartoon/cowbell_ringing.ogg',
-    },
-    {
-      color: 'orange',
-      src:
-        'https://actions.google.com/sounds/v1/cartoon/strike_hollow_wood.ogg',
-    },
-    {
-      color: 'amber',
-      src: 'https://actions.google.com/sounds/v1/cartoon/instrument_strum.ogg',
-    },
-  ];
+  public readonly sounds = sounds;
 
-  @Watch('color')
   public play(color: string): void {
-    const targetOrArray = this.$refs[color];
-    const target = Array.isArray(targetOrArray)
-      ? targetOrArray[0]
-      : targetOrArray;
-    if (!(target instanceof HTMLAudioElement)) return;
+    soundColors.forEach(key => {
+      const targetOrArray = this.$refs[key];
+      const target = Array.isArray(targetOrArray)
+        ? targetOrArray[0]
+        : targetOrArray;
+      if (!(target instanceof HTMLAudioElement)) return;
 
-    target.play();
+      if (key === color) {
+        // console.log('play', color);
+        target.play();
+      } else {
+        target.pause();
+        target.currentTime = 0;
+      }
+    });
   }
 
-  public created(): void {
-    this.play(this.color);
+  @Watch('dur', { immediate: true })
+  private watchDur(dur: number, prevDur: number): void {
+    if (dur >= prevDur) return;
+
+    const color = getColor(this.dur);
+    const prevColor = getColor(prevDur);
+    if (color === prevColor) return;
+
+    this.play(color);
   }
 }
 </script>

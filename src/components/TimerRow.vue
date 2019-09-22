@@ -8,12 +8,15 @@
     td {{value.area}}
     td {{value.field}}
     td
-      v-btn-toggle(:value="null")
-        v-btn(small @click="fromNow(120)") 120分後
-        v-btn(small @click="charryOver(121)") 繰越121分
-        v-btn(small @click="inputDialog = true") 入力
+      v-row
+        v-col
+          v-btn(small @click="fromNow(120)") 120分後
+        v-col
+          v-btn(small @click="charryOver(122)") 繰越122分
+        v-col
+          v-btn(small @click="inputDialog = true") 入力
+      alert-player(:dur="dur")
     input-dialog(:name="value.name" :timerRef="value.ref" v-model="inputDialog")
-    alert-player(:color="color")
 </template>
 
 <script lang="ts">
@@ -22,13 +25,7 @@ import AlertPlayer from './AlertPlayer.vue';
 import InputDialog from './InputDialog.vue';
 import TimerIcon from './TimerIcon.vue';
 import Timer from '../timers/Timer';
-
-const ColorTable: [number, string][] = [
-  [-1, 'grey'],
-  [0, 'red'],
-  [1, 'orange'],
-  [3, 'amber'],
-];
+import getColor from '../color';
 
 @Component({
   components: {
@@ -49,11 +46,7 @@ export default class TimerRow extends Vue {
   }
 
   public get color(): string {
-    const dur = this.dur;
-
-    const matched = ColorTable.find(([t]) => dur < t * 60 * 1000);
-    if (!matched) return 'green';
-    return matched[1];
+    return getColor(this.dur);
   }
 
   private get timestampText(): string {
