@@ -3,7 +3,7 @@ node_js: node
 env:
   secure: h7ig3J9Hriv7h/jJFElI3WQFArBUt1oXgB3liZq7hfgCz1NFmalVtsOCdhpTFOU8jw6Wk9zlC/0Yg4+3Ph66TjwGq7fa80K9ZoZKaV8sWrFo6qkiYUrp425ynWZkap9UqFqDEydLnhjg+/lEL/ve01Sm3iUGIyjXrA1jJUn5MYdqX2c74iVgJbudnyMiadz9d2Omhg/cuYEVPtAL3HeJBi8aFh6cp6qu+piMbOZoyhCuRO1uHjT8123aTY+RWjsRln/d8Hf+/bPUxQGqwhaPVzt1ExWx/R8aAJrWeEyKp55qUwYhi3DK3NoSc55UrbQGBrECd6Ec541dIAlaLUSMbMhb9k5STKI6SS9jgTrTJgwXFSW+2qb8hhJNahlGO6q9/4jBES8+zvlC+jiRww73jp3eMr9BvNiVw07vjmroWPndTVyX766PM9Koln4XtDADBMq65BTdsYRJUvxDLPTt11Fmrf976lDgvch5liYJuqSj8wkLrw1hfxiiCYoAlNNBx11WeRshQS1QwWfJXJ/4WRdVyRxTuDXTX+FiW63cLqM5oeh0VXl7FQ+DVYLEyPfqe49q+WnjpvAxKqhtQ98cZE6OyVR8GedFB6+gERa45Trioma4VEyvHg1WiIzM9QCHgcKj4zCdEqSThkT/1GLAEneKTwNG2/0gQRH67Muidl4=
 before_deploy:
-- firebase --token $FIREBASE_TOKEN setup:web > src/firebase/setup.js
+- firebase --token $FIREBASE_TOKEN setup:web | tail -n +2 > src/firebase/setup.js
 - npm run build
 deploy:
   provider: firebase
