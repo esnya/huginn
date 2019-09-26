@@ -12,7 +12,7 @@
         v-col
           v-btn(small @click="fromNow(120)") 120分後
         v-col
-          v-btn(small @click="charryOver(122)") 繰越122分
+          v-btn(small @click="charryOver(121)") 繰越121分
         v-col
           v-btn(small @click="inputDialog = true") 入力
       alert-player(:dur="dur")
