@@ -37,7 +37,7 @@ export default class App extends Vue {
   }
 
   public async signIn(): Promise<void> {
-    await auth.signInWithPopup(twitterAuthProvider);
+    await auth.signInWithRedirect(twitterAuthProvider);
   }
 
   private unsubscribe: (() => void)[] = [];
