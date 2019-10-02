@@ -1,0 +1,265 @@
+{
+  "name": "MVP",
+  "attributes": [
+    {
+      "name": "レベル",
+      "value": "level",
+      "type": "number"
+    },
+    {
+      "name": "エリア",
+      "value": "area",
+      "type": "string"
+    },
+    {
+      "name": "フィールド",
+      "value": "field",
+      "type": "string"
+    }
+  ],
+  "timers": [
+    {
+      "name": "エンジェリング",
+      "timestamp": 1569922926924,
+      "attributes": {
+        "area": "プロンテラ",
+        "field": "南門",
+        "level": 25
+      }
+    },
+    {
+      "name": "黄金盗虫",
+      "timestamp": 1569922926932,
+      "attributes": {
+        "area": "プロンテラ",
+        "field": "地下水路2F",
+        "level": 30
+      }
+    },
+    {
+      "name": "デビルリング",
+      "timestamp": 1569922926937,
+      "attributes": {
+        "area": "プロンテラ",
+        "field": "迷宮の森",
+        "level": 35
+      }
+    },
+    {
+      "name": "ドレイク",
+      "timestamp": 1569922926941,
+      "attributes": {
+        "area": "プロンテラ",
+        "field": "幽霊船",
+        "level": 40
+      }
+    },
+    {
+      "name": "ストラウフ",
+      "timestamp": 1569922926945,
+      "attributes": {
+        "area": "プロンテラ",
+        "field": "海底神殿",
+        "level": 45
+      }
+    },
+    {
+      "name": "ゴブリンリーダー",
+      "timestamp": 1569922926949,
+      "attributes": {
+        "area": "ゲフェン",
+        "field": "ゴブリンの森",
+        "level": 50
+      }
+    },
+    {
+      "name": "ミストレス",
+      "timestamp": 1569922926952,
+      "attributes": {
+        "area": "ゲフェン",
+        "field": "ミョルニール",
+        "level": 55
+      }
+    },
+    {
+      "name": "マヤー",
+      "timestamp": 1569922926957,
+      "attributes": {
+        "area": "モロク",
+        "field": "蟻地獄南部",
+        "level": 60
+      }
+    },
+    {
+      "name": "フリオニ",
+      "timestamp": 1569922926960,
+      "attributes": {
+        "area": "モロク",
+        "field": "ゾクラト砂漠",
+        "level": 65
+      }
+    },
+    {
+      "name": "エドガ",
+      "timestamp": 1569922926963,
+      "attributes": {
+        "area": "フェイヨン",
+        "field": "フェイヨンの森",
+        "level": 70
+      }
+    },
+    {
+      "name": "オシリス",
+      "timestamp": 1569922926966,
+      "attributes": {
+        "area": "モロク",
+        "field": "ピラミッドダンジョン2F",
+        "level": 73
+      }
+    },
+    {
+      "name": "月夜花",
+      "timestamp": 1569922926968,
+      "attributes": {
+        "area": "フェイヨン",
+        "field": "フェイヨン洞2F",
+        "level": 76
+      }
+    },
+    {
+      "name": "オークヒーロー",
+      "timestamp": 1569922926969,
+      "attributes": {
+        "area": "ゲフェン",
+        "field": "オークの集落",
+        "level": 80
+      }
+    },
+    {
+      "name": "コボルドリーダー",
+      "timestamp": 1569922926970,
+      "attributes": {
+        "area": "ゲフェン",
+        "field": "コボルドの森",
+        "level": 80
+      }
+    },
+    {
+      "name": "ドッペルゲンガー",
+      "timestamp": 1569922926970,
+      "attributes": {
+        "area": "ゲフェン",
+        "field": "ゲフェン地下",
+        "level": 83
+      }
+    },
+    {
+      "name": "アトロス",
+      "timestamp": 1569922926971,
+      "attributes": {
+        "area": "フェイヨン",
+        "field": "フェイヨン南",
+        "level": 84
+      }
+    },
+    {
+      "name": "オークロード",
+      "timestamp": 1569922926972,
+      "attributes": {
+        "area": "ゲフェン",
+        "field": "オークの洞",
+        "level": 86
+      }
+    },
+    {
+      "name": "データルザウルス",
+      "timestamp": 1569922926973,
+      "attributes": {
+        "area": "古城",
+        "field": "グラストヘイム外郭",
+        "level": 90
+      }
+    },
+    {
+      "name": "オウルバロン",
+      "timestamp": 1569922926974,
+      "attributes": {
+        "area": "古城",
+        "field": "古城",
+        "level": 93
+      }
+    },
+    {
+      "name": "ブラッディナイト",
+      "timestamp": 1569922926974,
+      "attributes": {
+        "area": "古城",
+        "field": "グラストヘイム騎士団",
+        "level": 98
+      }
+    },
+    {
+      "name": "ダークロード",
+      "timestamp": 1569922926976,
+      "attributes": {
+        "area": "古城",
+        "field": "グラストヘイム墓地",
+        "level": 100
+      }
+    },
+    {
+      "name": "バフォメット",
+      "timestamp": 1569922926975,
+      "attributes": {
+        "area": "古城",
+        "field": "グラストヘイム本館",
+        "level": 100
+      }
+    },
+    {
+      "name": "週替りMVP",
+      "timestamp": 1569922926976,
+      "attributes": {
+        "area": "古城",
+        "field": "グラストヘイム本館",
+        "level": 100
+      }
+    },
+    {
+      "name": "タイムホルダー",
+      "timestamp": 1569922926977,
+      "attributes": {
+        "area": "アルデバラン",
+        "field": "時計塔2F",
+        "level": 110
+      }
+    },
+    {
+      "name": "ロメロスペシャル",
+      "timestamp": 1569922926977,
+      "attributes": {
+        "area": "アルデバラン",
+        "field": "時計塔地下",
+        "level": 113
+      }
+    },
+    {
+      "name": "ストームナイト",
+      "timestamp": 1569922926978,
+      "attributes": {
+        "area": "ルティエ",
+        "field": "おもちゃ工場1F",
+        "level": 115
+      }
+    },
+    {
+      "name": "ハティ",
+      "timestamp": 1569922926978,
+      "attributes": {
+        "area": "ルティエ",
+        "field": "ルティエ",
+        "level": 118
+      }
+    }
+  ]
+}

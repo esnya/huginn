@@ -4,20 +4,18 @@
     v-content
       with-user
         template(v-slot="{ user }")
-          timer-list(:timersRef="getTimersRef(user)")
+          router-view(:user="user")
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import AppBar from './components/AppBar.vue';
-import TimerList from './components/TimerList.vue';
 import WithUser from './components/WithUser.vue';
 import { firestore } from './firebase';
 
 @Component({
   components: {
     AppBar,
-    TimerList,
     WithUser,
   },
 })

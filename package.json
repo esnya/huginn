@@ -3,20 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "vue-cli-service build",
-    "deploy": "firebase deploy",
-    "lint": "vue-cli-service lint",
     "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "deploy": "firebase deploy",
     "setup": "firebase setup:web | tail -n +2 > src/firebase/setup.js"
   },
   "dependencies": {
     "core-js": "^2.6.5",
+    "file-select": "^1.0.2",
     "firebase": "^6.6.1",
     "lodash": "^4.17.15",
+    "promise-file-reader": "^1.0.2",
     "save-file": "^2.3.1",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
     "vue-property-decorator": "^8.1.0",
+    "vue-router": "^3.0.3",
     "vuetify": "^2.0.0"
   },
   "devDependencies": {
