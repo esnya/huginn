@@ -3,10 +3,11 @@
     td
       timer-icon.mr-3(:name="value.name")
       span {{value.name}}
-    td {{value.level}}
     td {{timestampText}}
-    td {{value.area}}
-    td {{value.field}}
+    td(
+      :key="i"
+      v-for="(attribute, i) in attributeValues"
+    ) {{attribute}}
     td
       v-row
         v-col
@@ -21,11 +22,13 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import get from 'lodash/get';
+import Timer from '../types/Timer';
+import TableHeader from '../types/TableHeader';
+import getColor from '../color';
 import AlertPlayer from './AlertPlayer.vue';
 import InputDialog from './InputDialog.vue';
 import TimerIcon from './TimerIcon.vue';
-import Timer from '../timers/Timer';
-import getColor from '../color';
 
 @Component({
   components: {
@@ -37,6 +40,8 @@ import getColor from '../color';
 export default class TimerRow extends Vue {
   @Prop({ required: true, type: Object })
   value!: Timer & { ref: firebase.firestore.DocumentReference };
+
+  @Prop({ required: true, type: Array }) attributes!: TableHeader[];
 
   public inputDialog = false;
   public now: number = Date.now();
@@ -54,6 +59,12 @@ export default class TimerRow extends Vue {
     const seconds = Math.floor(abs / 1000);
     const minutes = Math.floor(seconds / 60);
     return [minutes, seconds % 60].map(n => `${n}`.padStart(2, '0')).join(':');
+  }
+
+  get attributeValues(): (string | number | boolean)[] {
+    return this.attributes.map(({ value }) =>
+      value ? get(this.value, value) : '',
+    );
   }
 
   public async fromNow(minutes: number): Promise<void> {

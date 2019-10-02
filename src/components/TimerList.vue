@@ -7,22 +7,24 @@
       :items-per-page="100"
       :loading="timers.length === 0"
     )
-      template(v-slot:item="{ item }")
-        timer-row(:value="item")
-    export-fab(:timersRef="timersRef")
+      template(v-slot:item="{ item, headers }")
+        timer-row(:value="item" :attributes="attributes")
+    io-fab(:timersRef="timersRef")
 </template>
 
 <script lang="ts">
 import { firestore } from 'firebase';
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import DefaultTimers from '../timers/DefaultTimers';
 import Timer from '../timers/Timer';
-import ExportFab from './ExportFab.vue';
+import IoFab from './IoFab.vue';
 import TimerRow from './TimerRow.vue';
+import TableHeader from '../types/TableHeader';
+import TimerSet from '../types/TimerSet';
 
 @Component({
   components: {
-    ExportFab,
+    IoFab,
     TimerRow,
   },
 })
@@ -30,16 +32,31 @@ export default class TimerList extends Vue {
   @Prop({ required: true, type: Object })
   timersRef!: firebase.firestore.CollectionReference;
 
-  readonly headers = [
-    { text: '名前', value: 'name' },
-    { text: 'レベル', value: 'level' },
-    { text: '残り時間', value: 'timestamp' },
-    { text: 'エリア', value: 'area' },
-    { text: 'フィールド', value: 'field' },
-    { text: '', value: 'actions', sortable: false },
-  ];
+  get headers(): TableHeader[] {
+    return [
+      { text: '名前', value: 'name' },
+      { text: '残り時間', value: 'timestamp' },
+      ...this.attributes,
+      { text: '', value: 'actions', sortable: false },
+    ];
+  }
 
   timers: (Timer & { ref: firebase.firestore.DocumentReference })[] = [];
+
+  attributes: TableHeader[] = [];
+
+  @Watch('timersRef', { immediate: true })
+  async updateAttributes(): Promise<void> {
+    this.attributes = [];
+
+    const timerRef = this.timersRef.parent;
+    if (!timerRef) return;
+
+    const data = (await timerRef.get()).data() as TimerSet | undefined;
+    if (!data) return;
+
+    this.attributes = data.attributes;
+  }
 
   async created(): Promise<void> {
     const unsubscribe = this.timersRef.onSnapshot(snapshot => {
