@@ -10,4 +10,17 @@ export const app = firebase.app();
 export const auth = app.auth();
 export const firestore = app.firestore();
 
-export const twitterAuthProvider = new firebase.auth.TwitterAuthProvider();
+export const providers = [
+  // {
+  //   color: 'gray',
+  //   dark: false,
+  //   text: 'Email',
+  //   instance: new firebase.auth.EmailAuthProvider(),
+  // },
+  {
+    color: 'rgb(0, 95, 209)',
+    dark: true,
+    text: 'Twitter',
+    instance: new firebase.auth.TwitterAuthProvider(),
+  },
+];

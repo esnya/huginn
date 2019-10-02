@@ -1,18 +1,19 @@
 <template lang="pug">
-  v-container
-    v-row(justify-center)
-      v-card
-        v-card-title パスワードが必要です。
-        v-card-text
-          v-text-field(label="password" v-model="password")
-        v-card-actions
-          v-spacer
-          v-btn(
-            color="primary"
-            :disabled="!password"
-            :loading="loading"
-            @click="join"
-          ) OK
+  v-container(fluid)
+    v-row(justify="center")
+      v-col(cols="auto")
+        v-card
+          v-card-title パスワードが設定されています。
+          v-card-text
+            v-text-field(label="password" v-model="password")
+          v-card-actions
+            v-spacer
+            v-btn(
+              color="primary"
+              :disabled="!password"
+              :loading="loading"
+              @click="join"
+            ) OK
 </template>
 
 <script lang="ts">
