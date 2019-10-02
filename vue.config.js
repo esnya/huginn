@@ -1,9 +1,4 @@
 module.exports = {
-  configureWebpack: {
-    module: {
-      noParse: /firebase\/setup\.js$/,
-    },
-  },
   pages: {
     index: {
       entry: './src/main.ts',
