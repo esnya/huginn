@@ -7,7 +7,7 @@
       :items-per-page="100"
       :loading="timers.length === 0"
     )
-      template(v-slot:item="{ item, headers }")
+      template(v-slot:item="{ item }")
         timer-row(:value="item" :attributes="attributes")
     io-fab(:timersRef="timersRef")
 </template>

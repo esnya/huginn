@@ -1,15 +1,15 @@
 <template lang="pug">
-  tr.lighten-5(:class="[color, `${color}--text`]")
+  tr.huginn-timer-row.lighten-5(:class="[color, `${color}--text`]")
     td
       timer-icon.mr-3(:name="value.name")
       span {{value.name}}
     td {{timestampText}}
-    td(
+    td.d-none.d-sm-table-cell(
       :key="i"
       v-for="(attribute, i) in attributeValues"
     ) {{attribute}}
     td
-      timer-actions(:timerRef="value.ref" @edit="inputDialog = true")
+      timer-actions.flex-nowrap(:timerRef="value.ref" @edit="inputDialog = true")
     alert-player(:dur="dur")
     input-dialog(:name="value.name" :timerRef="value.ref" v-model="inputDialog")
 </template>
