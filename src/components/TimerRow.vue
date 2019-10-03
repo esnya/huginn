@@ -10,6 +10,7 @@
     ) {{attribute}}
     td
       timer-actions(:timerRef="value.ref" @edit="inputDialog = true")
+    alert-player(:dur="dur")
     input-dialog(:name="value.name" :timerRef="value.ref" v-model="inputDialog")
 </template>
 
