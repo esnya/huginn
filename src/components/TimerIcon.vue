@@ -12,15 +12,15 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 export default class TimerIcon extends Vue {
   @Prop({ required: true, type: String }) name!: string;
 
-  public src: string | null = null;
+  src: string | null = null;
 
   @Watch('name')
-  public async updateIcon(name: string): Promise<void> {
+  async updateIcon(name: string): Promise<void> {
     const { default: src } = await import(`../assets/${name}.png`);
     this.src = src;
   }
 
-  public async created(): Promise<void> {
+  async created(): Promise<void> {
     await this.updateIcon(this.name);
   }
 }

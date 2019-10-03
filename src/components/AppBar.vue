@@ -21,7 +21,7 @@ import { auth } from '../firebase';
   components: {},
 })
 export default class AppBar extends Vue {
-  public async signOut(): Promise<void> {
+  async signOut(): Promise<void> {
     await auth.signOut();
   }
 }

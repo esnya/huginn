@@ -18,13 +18,14 @@ import selectFile from 'file-select';
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import Timer from '../types/Timer';
 import TimerSet from '../types/TimerSet';
+import { TimerCollectionReference } from '../store';
 
 @Component({
   components: {},
 })
 export default class ExportFab extends Vue {
   @Prop({ required: true, type: Object })
-  timersRef!: firebase.firestore.CollectionReference;
+  timersRef!: TimerCollectionReference;
 
   loading: boolean = false;
 

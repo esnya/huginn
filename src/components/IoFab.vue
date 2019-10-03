@@ -15,6 +15,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import ExportFab from './ExportFab.vue';
 import ImportFab from './ImportFab.vue';
+import { TimerCollectionReference } from '../store';
 
 @Component({
   components: {
@@ -24,7 +25,7 @@ import ImportFab from './ImportFab.vue';
 })
 export default class IoFab extends Vue {
   @Prop({ required: true, type: Object })
-  timersRef!: firebase.firestore.CollectionReference;
+  timersRef!: TimerCollectionReference;
 
   fab: boolean = false;
 }

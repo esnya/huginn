@@ -13,23 +13,23 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Emit } from 'vue-property-decorator';
+import { TimerReference } from '../store';
 
 @Component({
   components: {},
 })
 export default class InputDialog extends Vue {
-  @Prop({ required: true, type: String }) public name!: string;
-  @Prop({ required: true, type: Boolean }) public value!: boolean;
-  @Prop({ required: true, type: Object })
-  public timerRef!: firebase.firestore.DocumentReference;
+  @Prop({ required: true, type: String }) name!: string;
+  @Prop({ required: true, type: Boolean }) value!: boolean;
+  @Prop({ required: true, type: Object }) timerRef!: TimerReference;
 
   @Emit('input')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public emitInput(value: boolean) {}
+  emitInput(value: boolean) {}
 
-  public inputValue: number | string = 120;
+  inputValue: number | string = 120;
 
-  public async set(): Promise<void> {
+  async set(): Promise<void> {
     const minutes = Number(this.inputValue);
     await this.timerRef.update({
       timestamp: Date.now() + minutes * 60 * 1000,

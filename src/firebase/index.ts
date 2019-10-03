@@ -8,7 +8,6 @@ export default firebase;
 export const app = firebase.app();
 
 export const auth = app.auth();
-export const firestore = app.firestore();
 
 export const providers = [
   // {
@@ -24,3 +23,5 @@ export const providers = [
     instance: new firebase.auth.TwitterAuthProvider(),
   },
 ];
+
+export * from './firestore';

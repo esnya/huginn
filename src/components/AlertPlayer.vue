@@ -35,9 +35,9 @@ const soundColors = sounds.map(sound => sound.color);
 export default class AlertPlayer extends Vue {
   @Prop({ required: true, type: Number }) dur!: number;
 
-  public readonly sounds = sounds;
+  readonly sounds = sounds;
 
-  public play(color: string): void {
+  play(color: string): void {
     soundColors.forEach(key => {
       const targetOrArray = this.$refs[key];
       const target = Array.isArray(targetOrArray)
@@ -56,7 +56,7 @@ export default class AlertPlayer extends Vue {
   }
 
   @Watch('dur', { immediate: true })
-  private watchDur(dur: number, prevDur: number): void {
+  watchDur(dur: number, prevDur: number): void {
     if (dur >= prevDur) return;
 
     const color = getColor(this.dur);

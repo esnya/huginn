@@ -7,7 +7,7 @@
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import TimerSetType from '../types/TimerSet';
 import TimerList from '../components/TimerList.vue';
-import { firestore } from '../firebase';
+import store, { TimerSetReference, TimerCollectionReference } from '../store';
 
 @Component({
   components: {
@@ -21,11 +21,11 @@ export default class TimerSet extends Vue {
     return this.$route.params.timerSetId;
   }
 
-  get timerSetRef(): firebase.firestore.DocumentReference {
-    return firestore.collection('timer-sets').doc(this.timerSetId);
+  get timerSetRef(): TimerSetReference {
+    return store.collection('timer-sets').doc(this.timerSetId);
   }
 
-  get timersRef(): firebase.firestore.CollectionReference {
+  get timersRef(): TimerCollectionReference {
     return this.timerSetRef.collection('timers');
   }
 

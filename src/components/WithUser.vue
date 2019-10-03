@@ -27,12 +27,12 @@ import { Component, Vue } from 'vue-property-decorator';
   components: {},
 })
 export default class WithUser extends Vue {
-  public user: firebase.User | null = null;
-  public loading: boolean = false;
+  user: firebase.User | null = null;
+  loading: boolean = false;
 
   readonly providers = providers;
 
-  public async signIn(provider: firebase.auth.AuthProvider): Promise<void> {
+  async signIn(provider: firebase.auth.AuthProvider): Promise<void> {
     try {
       this.loading = true;
       await auth.signInWithRedirect(provider);
@@ -50,7 +50,7 @@ export default class WithUser extends Vue {
     }
   }
 
-  private created(): void {
+  created(): void {
     this.user = auth.currentUser;
     const unsubscribe = auth.onAuthStateChanged(
       (user: firebase.User | null) => {

@@ -38,7 +38,7 @@ export default class Timestamp extends Vue {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   emitColorChange(color: string, prevColor: string): void {}
 
-  private async created(): Promise<void> {
+  async created(): Promise<void> {
     const interval = setInterval(() => {
       this.now = Date.now();
     }, 500);

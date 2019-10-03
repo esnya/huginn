@@ -13,14 +13,13 @@
 </template>
 
 <script lang="ts">
-import { firestore } from 'firebase';
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
-import DefaultTimers from '../timers/DefaultTimers';
-import Timer from '../timers/Timer';
+import TableHeader from '../types/TableHeader';
+import Timer from '../types/Timer';
+import TimerSet from '../types/TimerSet';
+import { TimerReference, TimerCollectionReference } from '../store';
 import IoFab from './IoFab.vue';
 import TimerRow from './TimerRow.vue';
-import TableHeader from '../types/TableHeader';
-import TimerSet from '../types/TimerSet';
 
 @Component({
   components: {
@@ -30,7 +29,7 @@ import TimerSet from '../types/TimerSet';
 })
 export default class TimerList extends Vue {
   @Prop({ required: true, type: Object })
-  timersRef!: firebase.firestore.CollectionReference;
+  timersRef!: TimerCollectionReference;
 
   get headers(): TableHeader[] {
     return [
@@ -41,7 +40,7 @@ export default class TimerList extends Vue {
     ];
   }
 
-  timers: (Timer & { ref: firebase.firestore.DocumentReference })[] = [];
+  timers: (Timer & { ref: TimerReference })[] = [];
 
   attributes: TableHeader[] = [];
 
@@ -81,22 +80,6 @@ export default class TimerList extends Vue {
       });
     });
     this.$once('destroyed', unsubscribe);
-
-    await Promise.all(
-      DefaultTimers.map(async timer => {
-        const timerRef = this.timersRef.doc(timer.name);
-        const snapshot = await timerRef.get();
-
-        if (snapshot.exists) {
-          await timerRef.update(timer);
-        } else {
-          await timerRef.set({
-            ...timer,
-            timestamp: Date.now(),
-          });
-        }
-      }),
-    );
   }
 }
 </script>

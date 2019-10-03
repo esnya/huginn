@@ -9,14 +9,7 @@
       v-for="(attribute, i) in attributeValues"
     ) {{attribute}}
     td
-      v-row
-        v-col
-          v-btn(small @click="fromNow(120)") 120分後
-        v-col
-          v-btn(small @click="charryOver(121)") 繰越121分
-        v-col
-          v-btn(small @click="inputDialog = true") 入力
-      alert-player(:dur="dur")
+      timer-actions(:timerRef="value.ref" @edit="inputDialog = true")
     input-dialog(:name="value.name" :timerRef="value.ref" v-model="inputDialog")
 </template>
 
@@ -26,35 +19,38 @@ import get from 'lodash/get';
 import Timer from '../types/Timer';
 import TableHeader from '../types/TableHeader';
 import getColor from '../color';
+import { TimerReference } from '../store';
 import AlertPlayer from './AlertPlayer.vue';
 import InputDialog from './InputDialog.vue';
+import TimerActions from './TimerActions.vue';
 import TimerIcon from './TimerIcon.vue';
 
 @Component({
   components: {
     AlertPlayer,
     InputDialog,
+    TimerActions,
     TimerIcon,
   },
 })
 export default class TimerRow extends Vue {
   @Prop({ required: true, type: Object })
-  value!: Timer & { ref: firebase.firestore.DocumentReference };
+  value!: Timer & { ref: TimerReference };
 
   @Prop({ required: true, type: Array }) attributes!: TableHeader[];
 
-  public inputDialog = false;
-  public now: number = Date.now();
+  inputDialog = false;
+  now: number = Date.now();
 
-  public get dur(): number {
+  get dur(): number {
     return this.value.timestamp - this.now;
   }
 
-  public get color(): string {
+  get color(): string {
     return getColor(this.dur);
   }
 
-  private get timestampText(): string {
+  get timestampText(): string {
     const abs = Math.abs(this.dur);
     const seconds = Math.floor(abs / 1000);
     const minutes = Math.floor(seconds / 60);
@@ -67,33 +63,12 @@ export default class TimerRow extends Vue {
     );
   }
 
-  public async fromNow(minutes: number): Promise<void> {
-    await this.value.ref.update({
-      timestamp: Date.now() + minutes * 60 * 1000,
-    });
-  }
-
-  public async charryOver(minutes: number): Promise<void> {
-    const now = Date.now();
-    let { timestamp } = this.value;
-    while (timestamp < now) {
-      timestamp += minutes * 60 * 1000;
-    }
-
-    await this.value.ref.update({
-      timestamp,
-    });
-  }
-
-  private unsubscribers: (() => void)[] = [];
-  private async created(): Promise<void> {
+  unsubscribers: (() => void)[] = [];
+  async created(): Promise<void> {
     const interval = setInterval(() => {
       this.now = Date.now();
     }, 500);
-    this.unsubscribers.push(() => clearInterval(interval));
-  }
-  private destroyed(): void {
-    this.unsubscribers.forEach(f => f());
+    this.$once('destroyed', () => clearInterval(interval));
   }
 }
 </script>

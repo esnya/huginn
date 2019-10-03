@@ -15,13 +15,14 @@
 <script lang="ts">
 import { save } from 'save-file';
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import { TimerCollectionReference } from '../store';
 
 @Component({
   components: {},
 })
 export default class ExportFab extends Vue {
   @Prop({ required: true, type: Object })
-  timersRef!: firebase.firestore.CollectionReference;
+  timersRef!: TimerCollectionReference;
 
   loading: boolean = false;
 
