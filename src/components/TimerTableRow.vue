@@ -1,17 +1,15 @@
 <template lang="pug">
   tr.huginn-timer-row.lighten-5(:class="[color, `${color}--text`]")
     td
-      timer-icon.mr-3(:name="value.name")
-      span {{value.name}}
+      timer-name(:timer="value")
     td {{timestampText}}
     td.d-none.d-sm-table-cell(
       :key="i"
       v-for="(attribute, i) in attributeValues"
     ) {{attribute}}
     td
-      timer-actions.flex-nowrap(:timerRef="value.ref" @edit="inputDialog = true")
+      timer-actions.flex-nowrap(:timerRef="value.ref" @edit="$emit('edit')")
     alert-player(:dur="dur")
-    input-dialog(:name="value.name" :timerRef="value.ref" v-model="inputDialog")
 </template>
 
 <script lang="ts">
@@ -22,19 +20,17 @@ import TableHeader from '../types/TableHeader';
 import getColor from '../color';
 import { TimerReference } from '../store';
 import AlertPlayer from './AlertPlayer.vue';
-import InputDialog from './InputDialog.vue';
 import TimerActions from './TimerActions.vue';
-import TimerIcon from './TimerIcon.vue';
+import TimerName from './TimerName.vue';
 
 @Component({
   components: {
     AlertPlayer,
-    InputDialog,
     TimerActions,
-    TimerIcon,
+    TimerName,
   },
 })
-export default class TimerRow extends Vue {
+export default class TimerTableRow extends Vue {
   @Prop({ required: true, type: Object })
   value!: Timer & { ref: TimerReference };
 

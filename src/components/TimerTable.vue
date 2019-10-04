@@ -8,8 +8,9 @@
       :loading="timers.length === 0"
     )
       template(v-slot:item="{ item }")
-        timer-row(:value="item" :attributes="attributes")
+        timer-table-row.text-truncate(:value="item" :attributes="attributes" @edit="editingTimer = item.snapshot")
     io-fab(:timersRef="timersRef")
+    timer-editor(v-model="editingTimer")
 </template>
 
 <script lang="ts">
@@ -17,17 +18,23 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import TableHeader from '../types/TableHeader';
 import Timer from '../types/Timer';
 import TimerSet from '../types/TimerSet';
-import { TimerReference, TimerCollectionReference } from '../store';
+import {
+  TimerReference,
+  TimerCollectionReference,
+  QueryDocumentSnapshot,
+} from '../store';
 import IoFab from './IoFab.vue';
-import TimerRow from './TimerRow.vue';
+import TimerEditor from './TimerEditor.vue';
+import TimerTableRow from './TimerTableRow.vue';
 
 @Component({
   components: {
     IoFab,
-    TimerRow,
+    TimerEditor,
+    TimerTableRow,
   },
 })
-export default class TimerList extends Vue {
+export default class TimerTable extends Vue {
   @Prop({ required: true, type: Object })
   timersRef!: TimerCollectionReference;
 
@@ -40,9 +47,13 @@ export default class TimerList extends Vue {
     ];
   }
 
-  timers: (Timer & { ref: TimerReference })[] = [];
+  timers: (Timer & {
+    ref: TimerReference;
+    snapshot: QueryDocumentSnapshot<Timer>;
+  })[] = [];
 
   attributes: TableHeader[] = [];
+  editingTimer: QueryDocumentSnapshot<Timer> | null = null;
 
   @Watch('timersRef', { immediate: true })
   async updateAttributes(): Promise<void> {
@@ -65,11 +76,12 @@ export default class TimerList extends Vue {
         const data = change.doc.data() as Timer;
         switch (change.type) {
           case 'added':
-            this.timers.push({ ...data, ref });
+            this.timers.push({ ...data, ref, snapshot: change.doc });
             break;
           case 'modified': {
             const timer = this.timers.find(a => a.name === name);
-            if (!timer) this.timers.push({ ...data, ref });
+            if (!timer)
+              this.timers.push({ ...data, ref, snapshot: change.doc });
             else Object.assign(timer, data);
             break;
           }

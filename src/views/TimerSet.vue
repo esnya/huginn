@@ -1,17 +1,17 @@
 <template lang="pug">
   .huginn-timer-set
-    timer-list(:timers-ref="timersRef")
+    timer-table(:timers-ref="timersRef")
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import TimerSetType from '../types/TimerSet';
-import TimerList from '../components/TimerList.vue';
+import TimerTable from '../components/TimerTable.vue';
 import store, { TimerSetReference, TimerCollectionReference } from '../store';
 
 @Component({
   components: {
-    TimerList,
+    TimerTable,
   },
 })
 export default class TimerSet extends Vue {
