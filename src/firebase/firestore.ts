@@ -62,8 +62,7 @@ export interface DocumentReference<T>
   collection<U>(path: string): CollectionReference<U>;
 }
 
-export interface CollectionReference<T>
-  extends firebase.firestore.CollectionReference {
+export interface Query<T> extends firebase.firestore.Query {
   onSnapshot(observer: {
     next?: (snapshot: QuerySnapshot<T>) => void;
     error?: (error: Error) => void;
@@ -89,7 +88,52 @@ export interface CollectionReference<T>
     onCompletion?: () => void,
   ): () => void;
 
+  where<U>(
+    fieldPath: string,
+    opStr: firebase.firestore.WhereFilterOp,
+    value: U,
+  ): Query<T>;
+
+  idEqual(other: firebase.firestore.Query): boolean;
+}
+
+export interface CollectionReference<T>
+  extends firebase.firestore.CollectionReference,
+    Query<T> {
+  onSnapshot(observer: {
+    next?: (snapshot: QuerySnapshot<T>) => void;
+    error?: (error: Error) => void;
+    complete?: () => void;
+  }): () => void;
+  onSnapshot(
+    options: firebase.firestore.SnapshotListenOptions,
+    observer: {
+      next?: (snapshot: QuerySnapshot<T>) => void;
+      error?: (error: Error) => void;
+      complete?: () => void;
+    },
+  ): () => void;
+  onSnapshot(
+    onNext: (snapshot: QuerySnapshot<T>) => void,
+    onError?: (error: Error) => void,
+    onCompletion?: () => void,
+  ): () => void;
+  onSnapshot(
+    options: firebase.firestore.SnapshotListenOptions,
+    onNext: (snapshot: QuerySnapshot<T>) => void,
+    onError?: (error: Error) => void,
+    onCompletion?: () => void,
+  ): () => void;
+
+  where<U>(
+    fieldPath: string,
+    opStr: firebase.firestore.WhereFilterOp,
+    value: U,
+  ): Query<T>;
+
   doc(path?: string): DocumentReference<T>;
+
+  isEqual(other: firebase.firestore.CollectionReference): boolean;
 }
 
 export interface ExistingDocumentSnapshot<T> extends DocumentSnapshot<T> {

@@ -3,6 +3,8 @@ import Router from 'vue-router';
 
 Vue.use(Router);
 
+const Home = (): Promise<any> =>
+  import(/* webpackChunkName: "home" */ './views/Home.vue');
 const TimerSet = (): Promise<typeof import('*.vue')> =>
   import(/* webpackChunkName: "timer-set" */ './views/TimerSet.vue');
 const TimerSetHome = (): Promise<typeof import('*.vue')> =>
@@ -19,8 +21,12 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
+      path: '/',
+      name: 'home',
+      component: Home,
+    },
+    {
       path: '/:id',
-      name: 'timer-set',
       component: TimerSet,
       children: [
         {

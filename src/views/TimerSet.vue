@@ -1,17 +1,6 @@
 <template lang="pug">
   .huginn-timer-set
-    v-app-bar(
-      app
-      dark
-      fixed
-      color="primary"
-    )
-      v-app-bar-nav-icon
-        img.huginn-nav-icon(:src="require('../assets/icon.png')")
-      v-toolbar-title {{name ? name : 'HUGINN'}}
-      v-spacer
-      v-btn(icon @click="signOut")
-        v-icon mdi-logout
+    app-bar(:title="name && `${name} - Huginn`")
     v-content
       router-view(
         :reference="ref"
@@ -27,19 +16,15 @@
           v-col(cols="auto") なう、ろーでぃんぐ。
 </template>
 
-<style lang="stylus" scoped>
-.huginn-nav-icon
-  max-height 48px
-  max-width 48px
-</style>
-
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
-import { auth } from '../firebase';
 import store, { exists, TimerSetReference, TimerSetSnapshot } from '../store';
+import AppBar from '../components/AppBar.vue';
 
 @Component({
-  components: {},
+  components: {
+    AppBar,
+  },
 })
 export default class TimerSet extends Vue {
   @Prop({ required: true, type: Object }) user!: firebase.User;
@@ -76,10 +61,6 @@ export default class TimerSet extends Vue {
         throw e;
       }
     }
-  }
-
-  async signOut(): Promise<void> {
-    await auth.signOut();
   }
 
   @Watch('name')
