@@ -8,6 +8,7 @@
           name="from-now"
           ref="input"
           suffix="分後"
+          type="number"
           v-model="fromNow"
           @keypress.enter="submit"
         )
@@ -57,9 +58,7 @@ export default class TimerEditor extends Vue {
         if (!input) return;
 
         this.$nextTick(() => {
-          input.focus();
-          input.selectionStart = 0;
-          input.selectionEnd = -1;
+          input.select();
         });
       });
     }
