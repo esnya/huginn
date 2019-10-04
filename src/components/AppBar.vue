@@ -6,7 +6,7 @@
     color="primary"
   )
     v-app-bar-nav-icon
-      v-icon mdi-timer
+      img.huginn-nav-icon(:src="require('../assets/icon.png')")
     v-toolbar-title HUGINN
     v-spacer
     v-btn(icon @click="signOut")
@@ -26,3 +26,9 @@ export default class AppBar extends Vue {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+.huginn-nav-icon
+  max-height 48px
+  max-width 48px
+</style>

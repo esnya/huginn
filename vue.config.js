@@ -3,7 +3,7 @@ module.exports = {
     index: {
       entry: './src/main.ts',
       template: './src/templates/index.pug',
-      favicon: './src/assets/エンジェリング.png',
+      favicon: './src/assets/icon.png',
     },
   },
 };

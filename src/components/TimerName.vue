@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    timer-icon.mr-3(:name="timer.name")
+    timer-icon.mr-3(:timer="timer")
     span {{timer.name}}
 </template>
 
