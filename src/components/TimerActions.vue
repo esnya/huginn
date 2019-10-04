@@ -36,7 +36,7 @@ export default class TimerActions extends Vue {
   get actions() {
     return [
       { label: '120分後', action: () => this.fromNow(120) },
-      { label: '繰越121分', action: () => this.fromNow(120) },
+      { label: '繰越121分', action: () => this.charryOver(121) },
       { label: '入力', action: () => this.$emit('edit') },
     ];
   }
