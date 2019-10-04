@@ -22,4 +22,4 @@ rules:
       trailingComma: all
   require-jsdoc: 'off'
   new-cap: 'off'
-  no-console: warning
+  no-console: warn

@@ -1,11 +1,24 @@
 <template lang="pug">
-  v-row
-    v-col(cols="auto")
-      v-btn(small @click="fromNow(120)") 120分後
-    v-col(cols="auto")
-      v-btn(small @click="charryOver(121)") 繰越121分
-    v-col(cols="auto")
-      v-btn(small @click="$emit('edit')") 入力
+  div
+    .d-none.d-sm-block
+      v-row
+        v-col(
+          cols="auto"
+          :key="i"
+          v-for="(action, i) in actions"
+        )
+          v-btn(small @click="action.action") {{action.label}}
+    v-menu(bottom left)
+      template(v-slot:activator="{ on }")
+        v-btn.d-sm-none(icon v-on="on")
+          v-icon mdi-dots-vertical
+      v-list
+        v-list-item(
+          :key="i"
+          v-for="(action, i) in actions"
+          @click="action.action"
+        )
+          v-list-item-title {{action.label}}
 </template>
 
 <script lang="ts">
@@ -19,6 +32,14 @@ import { TimerReference } from '../store';
 export default class TimerActions extends Vue {
   @Prop({ required: true, type: Object })
   timerRef!: TimerReference;
+
+  get actions() {
+    return [
+      { label: '120分後', action: () => this.fromNow(120) },
+      { label: '繰越121分', action: () => this.fromNow(120) },
+      { label: '入力', action: () => this.$emit('edit') },
+    ];
+  }
 
   async fromNow(minutes: number): Promise<void> {
     await this.timerRef.update({
