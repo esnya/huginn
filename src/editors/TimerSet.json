@@ -1,0 +1,34 @@
+{
+  "fields": [
+    {
+      "text": "名前",
+      "value": "name",
+      "type": "text",
+      "required": true
+    },
+    {
+      "text": "属性",
+      "value": "attributes",
+      "type": "table",
+      "fields": [
+        {
+          "text": "名前",
+          "value": "text",
+          "type": "text",
+          "required": true
+        },
+        {
+          "text": "属性名",
+          "value": "value",
+          "type": "text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "text": "パスワード",
+      "value": "password",
+      "type": "text"
+    }
+  ]
+}
