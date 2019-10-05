@@ -1,10 +1,8 @@
 <template lang="pug">
   v-app#app
-    app-bar
-    v-content
-      with-user
-        template(v-slot="{ user }")
-          router-view(:user="user")
+    with-user
+      template(v-slot="{ user }")
+        router-view(:user="user")
 </template>
 
 <script lang="ts">

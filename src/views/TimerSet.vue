@@ -1,77 +1,90 @@
 <template lang="pug">
   .huginn-timer-set
-    timer-table(:timers-ref="timersRef" @edit="editingTimer = $event")
-    timer-editor(v-model="editingTimer")
-    v-btn(
+    v-app-bar(
+      app
+      dark
+      fixed
       color="primary"
-      fab
-      fixed bottom right
-      :to="{ name: 'timer-set-editor', params: { timerSetId } }"
     )
-      v-icon mdi-pencil
+      v-app-bar-nav-icon
+        img.huginn-nav-icon(:src="require('../assets/icon.png')")
+      v-toolbar-title {{name ? name : 'HUGINN'}}
+      v-spacer
+      v-btn(icon @click="signOut")
+        v-icon mdi-logout
+    v-content
+      router-view(
+        :reference="ref"
+        :snapshot="snapshot"
+        :user="user"
+        v-if="snapshot || $route.meta.allowNull"
+      )
+      v-container(v-else)
+        v-row(align="center" justify="center")
+          v-col(cols="auto")
+            v-progress-circular(color="primary" indeterminate)
+        v-row(align="center" justify="center")
+          v-col(cols="auto") なう、ろーでぃんぐ。
 </template>
+
+<style lang="stylus" scoped>
+.huginn-nav-icon
+  max-height 48px
+  max-width 48px
+</style>
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
-import TimerSetType from '../types/TimerSet';
-import store, { TimerSetReference, TimerCollectionReference } from '../store';
-import TimerEditor from '../components/TimerEditor.vue';
-import TimerTable from '../components/TimerTable.vue';
+import { auth } from '../firebase';
+import store, { exists, TimerSetReference, TimerSetSnapshot } from '../store';
 
 @Component({
-  components: {
-    TimerTable,
-    TimerEditor,
-  },
+  components: {},
 })
 export default class TimerSet extends Vue {
   @Prop({ required: true, type: Object }) user!: firebase.User;
 
-  get timerSetId(): string {
-    return this.$route.params.timerSetId;
+  get id(): string {
+    return this.$route.params.id;
   }
 
-  get timerSetRef(): TimerSetReference {
-    return store.collection('timer-sets').doc(this.timerSetId);
+  get ref(): TimerSetReference {
+    return store.collection('timer-sets').doc(this.id);
   }
 
-  get timersRef(): TimerCollectionReference {
-    return this.timerSetRef.collection('timers');
+  get name(): string | null {
+    return this.snapshot && exists(this.snapshot)
+      ? this.snapshot.get('name')
+      : null;
   }
 
-  editingTimer: QueryDocumentSnapshot<Timer> | null = null;
-  timerSet: TimerSetType | null = null;
+  snapshot: TimerSetSnapshot | null = null;
 
-  @Watch('timerSetRef', { immediate: true })
-  async watchTimerSet(): Promise<void> {
+  unsubscribe: (() => void) | null = null;
+  @Watch('ref', { immediate: true }) async updateSnapshot(): Promise<void> {
+    if (this.unsubscribe) this.unsubscribe();
+    this.unsubscribe = this.ref.onSnapshot(snapshot => {
+      this.snapshot = snapshot;
+    });
+
     try {
-      await new Promise((resolve, reject) => {
-        const unsubscribe = this.timerSetRef.onSnapshot(
-          snapshot => {
-            this.timerSet = (snapshot.data() || null) as TimerSetType | null;
-          },
-          reject,
-          resolve,
-        );
-        this.$once('destroyed', unsubscribe);
-      });
-    } catch (error) {
-      if (error.code === 'permission-denied') {
-        this.$router.push({
-          name: 'timer-set-auth',
-          params: { timerSetId: this.timerSetId },
-        });
+      this.snapshot = await this.ref.get();
+    } catch (e) {
+      if (e.code === 'permission-denied' && !this.$route.meta.allowNull) {
+        this.$router.push({ name: 'timer-set-join', params: { id: this.id } });
       } else {
-        throw error;
+        throw e;
       }
     }
   }
 
-  @Watch('timerSet')
+  async signOut(): Promise<void> {
+    await auth.signOut();
+  }
+
+  @Watch('name')
   updateTitle(): void {
-    document.title = this.timerSet
-      ? `${this.timerSet.name} - Huginn`
-      : 'Huginn';
+    document.title = this.name ? `${this.name} - Huginn` : 'Huginn';
   }
 }
 </script>

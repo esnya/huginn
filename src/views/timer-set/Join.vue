@@ -18,30 +18,35 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { firestore } from '../firebase';
+import { TimerSetReference } from '../../store';
 
 @Component({
   components: {},
 })
-export default class TimerSetAuth extends Vue {
+export default class TimerSetJoin extends Vue {
   @Prop({ required: true, type: Object }) user!: { uid: string };
+  @Prop({ required: true, type: Object }) reference!: TimerSetReference;
   password: string | null = null;
   loading: boolean = false;
 
   async join(): Promise<void> {
-    if (!this.password) return;
-    const { timerSetId } = this.$route.params;
-    this.loading = true;
-    await firestore
-      .collection('timer-sets')
-      .doc(timerSetId)
-      .collection('members')
-      .doc(this.user.uid)
-      .set({
-        password: this.password,
+    try {
+      if (!this.password) return;
+
+      this.loading = true;
+      await this.reference
+        .collection('members')
+        .doc(this.user.uid)
+        .set({
+          password: this.password,
+        });
+      this.$router.push({
+        name: 'timer-set-home',
+        params: { id: this.reference.id },
       });
-    this.loading = false;
-    this.$router.push({ name: 'timer-set', params: { timerSetId } });
+    } finally {
+      this.loading = false;
+    }
   }
 }
 </script>

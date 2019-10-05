@@ -23,7 +23,7 @@ export type TimerCollectionReference = CollectionReference<Timer>;
 export type TimerSetSnapshot = DocumentSnapshot<TimerSet>;
 export interface TimerSetReference extends DocumentReference<TimerSet> {
   collection<U = Timer>(path: 'timers'): CollectionReference<U>;
-  collection<U = TimerSetMember>(path: 'member'): CollectionReference<U>;
+  collection<U = TimerSetMember>(path: 'members'): CollectionReference<U>;
 }
 
 export interface TimerSetCollectionReference
