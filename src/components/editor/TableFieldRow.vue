@@ -13,6 +13,12 @@
       v-row
         v-spacer
         v-col(cols="auto")
+          v-btn(:disabled="index === 0" icon @click="up")
+            v-icon mdi-arrow-up
+        v-col(cols="auto")
+          v-btn(:disabled="isLast" icon @click="down")
+            v-icon mdi-arrow-down
+        v-col(cols="auto")
           v-dialog(v-model="delDialog")
             template(v-slot:activator="{ on }")
               v-btn(color="error" v-on="on")
@@ -63,6 +69,10 @@ export default class TableFieldRow extends Vue {
     return this.field.fields.map(h => ({ ...h, sortable: false }));
   }
 
+  get isLast(): boolean {
+    return this.index === get(this.data, this.field.value).length - 1;
+  }
+
   delDialog = false;
 
   del(): void {
@@ -74,6 +84,28 @@ export default class TableFieldRow extends Vue {
     ]);
 
     this.delDialog = false;
+  }
+
+  up(): void {
+    const prev = get(this.data, this.field.value) || [];
+
+    this.$emit('update', [
+      ...prev.slice(0, this.index - 1),
+      prev[this.index],
+      prev[this.index - 1],
+      ...prev.slice(this.index + 1),
+    ]);
+  }
+
+  down(): void {
+    const prev = get(this.data, this.field.value) || [];
+
+    this.$emit('update', [
+      ...prev.slice(0, this.index),
+      prev[this.index + 1],
+      prev[this.index],
+      ...prev.slice(this.index + 2),
+    ]);
   }
 }
 </script>

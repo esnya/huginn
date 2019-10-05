@@ -27,5 +27,12 @@ export default class TextField extends Vue {
   get value(): string | null {
     return get(this.data, this.field.value);
   }
+
+  get rules(): ((value: string) => string | boolean)[] {
+    if (this.field.required) {
+      return [value => (value !== null && value !== '' ? true : '必須項目')];
+    }
+    return [];
+  }
 }
 </script>
