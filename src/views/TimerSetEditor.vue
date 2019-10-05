@@ -1,23 +1,48 @@
 <template lang="pug">
   v-container(v-if="timerSet")
-    editor(
-      :data="timerSet"
-      :fields="require('../editors/TimerSet.json').fields"
-      :loading="loading"
-      @update="onUpdate"
+    v-card
+      v-card-text
+        editor(
+          :data="timerSet"
+          :fields="require('../editors/TimerSet.json').fields"
+          :loading="loading"
+          @update="onUpdate"
+        )
+      v-card-actions
+        v-spacer
+        import-button(:timersRef="timersRef")
+        v-spacer
+        export-button(:timersRef="timersRef")
+        v-spacer
+    v-btn(
+      color="primary"
+      fab
+      fixed bottom right
+      :to="{ name: 'timer-set', params: { timerSetId } }"
     )
+      v-icon mdi-check
 </template>
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { Unsubscribe } from 'firebase';
-import store, { TimerSetReference, TimerSetSnapshot } from '../store';
+import store, {
+  TimerSetReference,
+  TimerSetSnapshot,
+  TimerCollectionReference,
+} from '../store';
 import { exists } from '../firebase';
 import TimerSet from '../types/TimerSet';
 import Editor from '../components/editor/Editor.vue';
+import ExportButton from '../components/ExportButton.vue';
+import ImportButton from '../components/ImportButton.vue';
 
 @Component({
-  components: { Editor },
+  components: {
+    ExportButton,
+    ImportButton,
+    Editor,
+  },
 })
 export default class TimerSetEditor extends Vue {
   get timerSetId(): string {
@@ -26,6 +51,10 @@ export default class TimerSetEditor extends Vue {
 
   get timerSetRef(): TimerSetReference {
     return store.collection('timer-sets').doc(this.timerSetId);
+  }
+
+  get timersRef(): TimerCollectionReference {
+    return this.timerSetRef.collection('timers');
   }
 
   loading = false;

@@ -1,15 +1,10 @@
 <template lang="pug">
-  v-tooltip(left)
-    template(v-slot:activator="{ on }")
-      v-btn(
-        color="primary"
-        fab
-        :loading="loading"
-        v-on="on"
-        @click="onClick"
-      )
-        v-icon mdi-file-import
-    span インポート
+  v-btn(
+    :loading="loading"
+    @click="onClick"
+  )
+    v-icon(left) mdi-file-import
+    | インポート
 </template>
 
 <script lang="ts">
@@ -23,7 +18,7 @@ import { TimerCollectionReference } from '../store';
 @Component({
   components: {},
 })
-export default class ExportFab extends Vue {
+export default class ExportButton extends Vue {
   @Prop({ required: true, type: Object })
   timersRef!: TimerCollectionReference;
 
@@ -36,7 +31,10 @@ export default class ExportFab extends Vue {
       const file = await selectFile({
         accept: 'application/json',
       });
-      if (!file) throw new Error('File is undefined');
+      if (!file) {
+        this.loading = false;
+        return;
+      }
 
       const json = await readAsText(file);
       const { timers, ...timer } = JSON.parse(json) as TimerSet & {

@@ -1,18 +1,17 @@
 <template lang="pug">
-  v-card
-    v-card-text
-      v-row(
-        :key="i"
-        cols="auto"
-        v-for="(field, i) in fields"
-      )
-        v-col(cols="12")
-          editor-field(
-            :data="data"
-            :field="field"
-            :loading="loading"
-            @update="$emit('update', field.value, $event)"
-          )
+  .huginn-editor
+    v-row(
+      :key="i"
+      cols="auto"
+      v-for="(field, i) in fields"
+    )
+      v-col(cols="12")
+        editor-field(
+          :data="data"
+          :field="field"
+          :loading="loading"
+          @update="$emit('update', field.value, $event)"
+        )
 </template>
 
 <script lang="ts">

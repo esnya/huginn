@@ -1,17 +1,27 @@
 <template lang="pug">
   .huginn-timer-set
-    timer-table(:timers-ref="timersRef")
+    timer-table(:timers-ref="timersRef" @edit="editingTimer = $event")
+    timer-editor(v-model="editingTimer")
+    v-btn(
+      color="primary"
+      fab
+      fixed bottom right
+      :to="{ name: 'timer-set-editor', params: { timerSetId } }"
+    )
+      v-icon mdi-pencil
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import TimerSetType from '../types/TimerSet';
-import TimerTable from '../components/TimerTable.vue';
 import store, { TimerSetReference, TimerCollectionReference } from '../store';
+import TimerEditor from '../components/TimerEditor.vue';
+import TimerTable from '../components/TimerTable.vue';
 
 @Component({
   components: {
     TimerTable,
+    TimerEditor,
   },
 })
 export default class TimerSet extends Vue {
@@ -29,6 +39,7 @@ export default class TimerSet extends Vue {
     return this.timerSetRef.collection('timers');
   }
 
+  editingTimer: QueryDocumentSnapshot<Timer> | null = null;
   timerSet: TimerSetType | null = null;
 
   @Watch('timerSetRef', { immediate: true })

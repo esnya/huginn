@@ -1,15 +1,10 @@
 <template lang="pug">
-  v-tooltip(left)
-    template(v-slot:activator="{ on }")
-      v-btn(
-        color="primary"
-        fab
-        :loading="loading"
-        v-on="on"
-        @click="onClick"
-      )
-        v-icon mdi-file-export
-    span エクスポート
+  v-btn(
+    :loading="loading"
+    @click="onClick"
+  )
+    v-icon(left) mdi-file-export
+    | エクスポート
 </template>
 
 <script lang="ts">
@@ -20,7 +15,7 @@ import { TimerCollectionReference } from '../store';
 @Component({
   components: {},
 })
-export default class ExportFab extends Vue {
+export default class ExportButton extends Vue {
   @Prop({ required: true, type: Object })
   timersRef!: TimerCollectionReference;
 

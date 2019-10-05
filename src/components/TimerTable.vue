@@ -8,9 +8,7 @@
       :loading="timers.length === 0"
     )
       template(v-slot:item="{ item }")
-        timer-table-row.text-truncate(:value="item" :attributes="attributes" @edit="editingTimer = item.snapshot")
-    io-fab(:timersRef="timersRef")
-    timer-editor(v-model="editingTimer")
+        timer-table-row.text-truncate(:value="item" :attributes="attributes" @edit="$emit('edit', item.snapshot)")
 </template>
 
 <script lang="ts">
@@ -23,14 +21,10 @@ import {
   TimerCollectionReference,
   QueryDocumentSnapshot,
 } from '../store';
-import IoFab from './IoFab.vue';
-import TimerEditor from './TimerEditor.vue';
 import TimerTableRow from './TimerTableRow.vue';
 
 @Component({
   components: {
-    IoFab,
-    TimerEditor,
     TimerTableRow,
   },
 })
@@ -53,7 +47,6 @@ export default class TimerTable extends Vue {
   })[] = [];
 
   attributes: TableHeader[] = [];
-  editingTimer: QueryDocumentSnapshot<Timer> | null = null;
 
   @Watch('timersRef', { immediate: true })
   async updateAttributes(): Promise<void> {
