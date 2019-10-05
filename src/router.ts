@@ -22,6 +22,14 @@ export default new Router({
         ),
     },
     {
+      path: '/:timerSetId/edit',
+      name: 'timer-set-editor',
+      component: () =>
+        import(
+          /* webpackChunkName: "timer-set-auth" */ './views/TimerSetEditor.vue'
+        ),
+    },
+    {
       path: '*',
       name: 'not-found',
       component: () =>

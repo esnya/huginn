@@ -21,9 +21,44 @@ export interface QuerySnapshot<T> extends firebase.firestore.QuerySnapshot {
   docChanges(): DocumentChange<T>[];
 }
 
+export type SnapshotListenOptions = firebase.firestore.SnapshotListenOptions;
+export type FirestoreError = firebase.firestore.FirestoreError;
+
 export interface DocumentReference<T>
   extends firebase.firestore.DocumentReference {
+  onSnapshot(observer: {
+    next?: (snapshot: DocumentSnapshot<T>) => void;
+    error?: (error: FirestoreError) => void;
+    complete?: () => void;
+  }): () => void;
+  onSnapshot(
+    options: SnapshotListenOptions,
+    observer: {
+      next?: (snapshot: DocumentSnapshot<T>) => void;
+      error?: (error: Error) => void;
+      complete?: () => void;
+    },
+  ): () => void;
+  onSnapshot(
+    onNext: (snapshot: DocumentSnapshot<T>) => void,
+    onError?: (error: Error) => void,
+    onCompletion?: () => void,
+  ): () => void;
+  onSnapshot(
+    options: SnapshotListenOptions,
+    onNext: (snapshot: DocumentSnapshot<T>) => void,
+    onError?: (error: Error) => void,
+    onCompletion?: () => void,
+  ): () => void;
+
   get(): Promise<DocumentSnapshot<T>>;
+  update(data: Partial<T>): Promise<void>;
+  update<U, V = any>(
+    path: string | firebase.firestore.FieldPath,
+    value: U,
+    ...mores: V[]
+  ): Promise<void>;
+
   collection<U>(path: string): CollectionReference<U>;
 }
 
