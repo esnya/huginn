@@ -10,7 +10,10 @@
 </template>
 
 <script lang="ts">
+import get from 'lodash/get';
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
+import TableHeader from '../types/TableHeader';
+import Timer from '../types/Timer';
 import getColor from '../color';
 
 const sounds = [
@@ -34,10 +37,14 @@ const soundColors = sounds.map(sound => sound.color);
 })
 export default class AlertPlayer extends Vue {
   @Prop({ required: true, type: Number }) dur!: number;
+  @Prop({ required: true, type: Object }) timer!: Timer;
+  @Prop({ required: true, type: Array }) attributes!: TableHeader[];
 
   readonly sounds = sounds;
 
   play(color: string): void {
+    const { timer, dur } = this;
+
     soundColors.forEach(key => {
       const targetOrArray = this.$refs[key];
       const target = Array.isArray(targetOrArray)
@@ -47,6 +54,15 @@ export default class AlertPlayer extends Vue {
 
       if (key === color) {
         // console.log('play', color);
+        const minutes = Math.ceil(dur / 60000);
+        const timeText = minutes === 0 ? '出現' : `${minutes}分前`;
+        const body = this.attributes
+          .map(({ text, value }) => `${text}: ${get(timer, value)}`)
+          .join('\n');
+        new Notification(`${timeText} ${timer.name}`, {
+          icon: timer.icon,
+          body,
+        });
         target.play();
       } else {
         target.pause();

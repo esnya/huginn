@@ -9,7 +9,7 @@
     ) {{attribute}}
     td
       timer-actions.flex-nowrap(:timerRef="value.ref" @edit="$emit('edit')")
-    alert-player(:dur="dur")
+    alert-player(:dur="dur" :timer="value" :attributes="attributes")
 </template>
 
 <script lang="ts">

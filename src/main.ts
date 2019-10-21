@@ -4,6 +4,10 @@ import App from './App.vue';
 import '@mdi/font/css/materialdesignicons.min.css';
 import router from './router';
 
+if (Notification.permission !== 'granted') {
+  Notification.requestPermission();
+}
+
 new Vue({
   vuetify,
   router,
