@@ -1,3 +1,6 @@
+const { GenerateSW } = require('workbox-webpack-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
+
 module.exports = {
   pages: {
     index: {
@@ -6,9 +9,16 @@ module.exports = {
       favicon: './src/assets/icon.png',
     },
   },
-  pwa: {
-    workboxOptions: {
-      importWorkboxFrom: 'local',
-    },
+  configureWebpack: {
+    plugins: [
+      new GenerateSW(),
+      new FaviconsWebpackPlugin({
+        logo: './src/assets/icon.png',
+        favicons: {
+          lang: 'ja-JP',
+          theme_color: '#1976d2',
+        },
+      }),
+    ],
   },
 };
