@@ -14,6 +14,7 @@ import get from 'lodash/get';
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import TableHeader from '../types/TableHeader';
 import Timer from '../types/Timer';
+import { showNotification } from '../notification';
 import getColor from '../color';
 
 const sounds = [
@@ -54,17 +55,15 @@ export default class AlertPlayer extends Vue {
 
       if (key === color) {
         // console.log('play', color);
-        if ('Notification' in window) {
-          const minutes = Math.ceil(dur / 60000);
-          const timeText = minutes === 0 ? '出現' : `${minutes}分前`;
-          const body = this.attributes
-            .map(({ text, value }) => `${text}: ${get(timer, value)}`)
-            .join('\n');
-          new Notification(`${timeText} ${timer.name}`, {
-            icon: timer.icon,
-            body,
-          });
-        }
+        const minutes = Math.ceil(dur / 60000);
+        const timeText = minutes === 0 ? '出現' : `${minutes}分前`;
+        const body = this.attributes
+          .map(({ text, value }) => `${text}: ${get(timer, value)}`)
+          .join('\n');
+        showNotification(`${timeText} ${timer.name}`, {
+          icon: timer.icon,
+          body,
+        });
         target.play();
       } else {
         target.pause();

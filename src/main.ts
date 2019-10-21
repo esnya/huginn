@@ -3,10 +3,10 @@ import vuetify from './plugins/vuetify';
 import App from './App.vue';
 import '@mdi/font/css/materialdesignicons.min.css';
 import router from './router';
+import './registerServiceWorker';
+import { init } from './notification';
 
-if ('Notification' in window && Notification.permission !== 'granted') {
-  Notification.requestPermission();
-}
+init();
 
 new Vue({
   vuetify,

@@ -6,4 +6,9 @@ module.exports = {
       favicon: './src/assets/icon.png',
     },
   },
+  pwa: {
+    workboxOptions: {
+      importWorkboxFrom: 'local',
+    },
+  },
 };
