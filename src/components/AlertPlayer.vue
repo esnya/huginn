@@ -54,15 +54,17 @@ export default class AlertPlayer extends Vue {
 
       if (key === color) {
         // console.log('play', color);
-        const minutes = Math.ceil(dur / 60000);
-        const timeText = minutes === 0 ? '出現' : `${minutes}分前`;
-        const body = this.attributes
-          .map(({ text, value }) => `${text}: ${get(timer, value)}`)
-          .join('\n');
-        new Notification(`${timeText} ${timer.name}`, {
-          icon: timer.icon,
-          body,
-        });
+        if ('Notification' in window) {
+          const minutes = Math.ceil(dur / 60000);
+          const timeText = minutes === 0 ? '出現' : `${minutes}分前`;
+          const body = this.attributes
+            .map(({ text, value }) => `${text}: ${get(timer, value)}`)
+            .join('\n');
+          new Notification(`${timeText} ${timer.name}`, {
+            icon: timer.icon,
+            body,
+          });
+        }
         target.play();
       } else {
         target.pause();
