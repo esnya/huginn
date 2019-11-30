@@ -32,7 +32,8 @@ import { TimerReference } from '../store';
 export default class TimerActions extends Vue {
   @Prop({ required: true, type: Object })
   timerRef!: TimerReference;
-  @Prop({ required: false, type: Number, default: 120 }) interval!: number;
+  @Prop({ required: false, type: Number, default: 120 * 60 * 1000 })
+  interval!: number;
 
   get intervalInMinutes(): number {
     return Math.ceil(this.interval / (60 * 1000));
