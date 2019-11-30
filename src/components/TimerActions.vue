@@ -32,11 +32,22 @@ import { TimerReference } from '../store';
 export default class TimerActions extends Vue {
   @Prop({ required: true, type: Object })
   timerRef!: TimerReference;
+  @Prop({ required: false, type: Number, default: 120 }) interval!: number;
+
+  get intervalInMinutes(): number {
+    return Math.ceil(this.interval / (60 * 1000));
+  }
 
   get actions() {
     return [
-      { label: '120分後', action: () => this.fromNow(120) },
-      { label: '繰越121分', action: () => this.charryOver(121) },
+      {
+        label: `${this.intervalInMinutes}分後`,
+        action: () => this.fromNow(this.intervalInMinutes),
+      },
+      {
+        label: `繰越${this.intervalInMinutes + 1}分`,
+        action: () => this.charryOver(this.intervalInMinutes + 1),
+      },
       { label: '入力', action: () => this.$emit('edit') },
     ];
   }
