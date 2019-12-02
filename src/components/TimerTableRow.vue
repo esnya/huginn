@@ -47,11 +47,34 @@ export default class TimerTableRow extends Vue {
     return getColor(this.dur);
   }
 
+  get carryOveredTimestampText(): string | null {
+    const interval = Number(this.value.interval) || 120 * 60 * 1000;
+    // if (this.dur >= -interval) return null;
+    this.dur;
+
+    let timestamp = this.value.timestamp;
+    const now = Date.now();
+    while (timestamp <= now) {
+      timestamp += interval + 60 * 1000;
+    }
+
+    const dur = timestamp - now;
+    // if (dur <= interval) return null;
+    const seconds = Math.floor(dur / 1000);
+    const minutes = Math.floor(seconds / 60);
+
+    return [minutes, seconds % 60].map(n => `${n}`.padStart(2, '0')).join(':');
+  }
+
   get timestampText(): string {
     const abs = Math.abs(this.dur);
     const seconds = Math.floor(abs / 1000);
     const minutes = Math.floor(seconds / 60);
-    return [minutes, seconds % 60].map(n => `${n}`.padStart(2, '0')).join(':');
+    const text = [minutes, seconds % 60]
+      .map(n => `${n}`.padStart(2, '0'))
+      .join(':');
+    const cText = this.carryOveredTimestampText;
+    return cText ? `${text} (${cText})` : text;
   }
 
   get attributeValues(): (string | number | boolean)[] {

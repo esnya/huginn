@@ -4,4 +4,5 @@ export default interface Timer {
   icon?: string;
   prevTimestamp?: number;
   attributes: Record<string, string | number | boolean>;
+  interval?: number;
 }
