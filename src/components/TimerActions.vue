@@ -50,7 +50,6 @@ export default class TimerActions extends Vue {
         action: () => this.charryOver(this.intervalInMinutes + 1),
       },
       { label: '入力', action: () => this.$emit('edit') },
-      { label: '入力', action: () => this.$emit('edit') },
       { label: '戻す', action: () => this.undo() },
     ];
   }

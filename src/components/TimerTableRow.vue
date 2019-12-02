@@ -49,17 +49,14 @@ export default class TimerTableRow extends Vue {
 
   get carryOveredTimestampText(): string | null {
     const interval = Number(this.value.interval) || 120 * 60 * 1000;
-    // if (this.dur >= -interval) return null;
-    this.dur;
+    let dur = this.dur;
 
-    let timestamp = this.value.timestamp;
-    const now = Date.now();
-    while (timestamp <= now) {
-      timestamp += interval + 60 * 1000;
+    if (dur > -interval) return null;
+
+    while (dur <= 0) {
+      dur += interval + 60 * 1000;
     }
 
-    const dur = timestamp - now;
-    // if (dur <= interval) return null;
     const seconds = Math.floor(dur / 1000);
     const minutes = Math.floor(seconds / 60);
 
