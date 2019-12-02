@@ -8,7 +8,7 @@
       v-for="(attribute, i) in attributeValues"
     ) {{attribute}}
     td
-      timer-actions.flex-nowrap(:timerRef="value.ref" :interval="value.interval" @edit="$emit('edit')")
+      timer-actions.flex-nowrap(:timerRef="value.ref" :timestamp="value.timestamp" :interval="value.interval" @edit="$emit('edit')")
     alert-player(:dur="dur" :timer="value" :attributes="attributes")
 </template>
 

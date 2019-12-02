@@ -23,7 +23,6 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { exists } from '../firebase';
 import { TimerReference } from '../store';
 
 @Component({
@@ -32,6 +31,7 @@ import { TimerReference } from '../store';
 export default class TimerActions extends Vue {
   @Prop({ required: true, type: Object })
   timerRef!: TimerReference;
+  @Prop({ required: false, type: Number }) timestamp?: number;
   @Prop({ required: false, type: Number, default: 120 * 60 * 1000 })
   interval!: number;
 
@@ -50,28 +50,40 @@ export default class TimerActions extends Vue {
         action: () => this.charryOver(this.intervalInMinutes + 1),
       },
       { label: '入力', action: () => this.$emit('edit') },
+      { label: '入力', action: () => this.$emit('edit') },
+      { label: '戻す', action: () => this.undo() },
     ];
   }
 
+  async undo(): Promise<void> {
+    const ss = await this.timerRef.get();
+    const prevTimestamp = ss.get('prevTimestamp');
+    if (typeof prevTimestamp == 'number') {
+      await this.timerRef.update({
+        prevTimestamp: this.timestamp,
+        timestamp: prevTimestamp,
+      });
+    }
+  }
+
   async fromNow(minutes: number): Promise<void> {
+    const timestamp = Date.now() + minutes * 60 * 1000;
     await this.timerRef.update({
-      timestamp: Date.now() + minutes * 60 * 1000,
+      prevTimestamp: this.timestamp || timestamp,
+      timestamp,
     });
   }
 
   async charryOver(minutes: number): Promise<void> {
-    const snapshot = await this.timerRef.get();
-
     const now = Date.now();
-    let timestamp = Number(
-      (exists(snapshot) && snapshot.data().timestamp) || now,
-    );
+    let timestamp = Number(this.timestamp || now);
 
     while (timestamp <= now) {
       timestamp += minutes * 60 * 1000;
     }
 
     await this.timerRef.update({
+      prevTimestamp: this.timestamp || timestamp,
       timestamp,
     });
   }
