@@ -51,7 +51,7 @@ export default class TimerTableRow extends Vue {
     const interval = Number(this.value.interval) || 120 * 60 * 1000;
     let dur = this.dur;
 
-    if (dur > -interval) return null;
+    if (dur >= 0) return null;
 
     while (dur <= 0) {
       dur += interval + 60 * 1000;
