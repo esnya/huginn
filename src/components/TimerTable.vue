@@ -36,6 +36,7 @@ export default class TimerTable extends Vue {
     return [
       { text: '名前', value: 'name' },
       { text: '残り時間', value: 'timestamp' },
+      { text: '出現時刻', value: 'timestamp' },
       ...this.attributes,
       { text: '', value: 'actions', sortable: false },
     ];

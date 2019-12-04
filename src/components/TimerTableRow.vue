@@ -2,6 +2,7 @@
   tr.huginn-timer-row.lighten-5(:class="[color, `${color}--text`]")
     td
       timer-name(:timer="value")
+    td {{durationText}}
     td {{timestampText}}
     td.d-none.d-sm-table-cell(
       :key="i"
@@ -15,6 +16,8 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import get from 'lodash/get';
+import moment, { duration } from 'moment';
+import formatter from 'format-number';
 import Timer from '../types/Timer';
 import TableHeader from '../types/TableHeader';
 import getColor from '../color';
@@ -22,6 +25,17 @@ import { TimerReference } from '../store';
 import AlertPlayer from './AlertPlayer.vue';
 import TimerActions from './TimerActions.vue';
 import TimerName from './TimerName.vue';
+
+const padLeft = formatter({
+  padLeft: 2,
+});
+function formatDuration(value: number): string {
+  const dur = duration(value);
+  const seconds = Math.floor(dur.seconds());
+  const minutes = Math.floor(dur.asMinutes());
+
+  return `${padLeft(minutes)}:${padLeft(seconds)}`;
+}
 
 @Component({
   components: {
@@ -47,7 +61,11 @@ export default class TimerTableRow extends Vue {
     return getColor(this.dur);
   }
 
-  get carryOveredTimestampText(): string | null {
+  get timestampText(): string {
+    return moment(this.value.timestamp).format('HH:mm:ss');
+  }
+
+  get charryOveredDuration(): number | null {
     const interval = Number(this.value.interval) || 120 * 60 * 1000;
     let dur = this.dur;
 
@@ -57,21 +75,16 @@ export default class TimerTableRow extends Vue {
       dur += interval + 60 * 1000;
     }
 
-    const seconds = Math.floor(dur / 1000);
-    const minutes = Math.floor(seconds / 60);
-
-    return [minutes, seconds % 60].map(n => `${n}`.padStart(2, '0')).join(':');
+    return dur;
   }
 
-  get timestampText(): string {
-    const abs = Math.abs(this.dur);
-    const seconds = Math.floor(abs / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const text = [minutes, seconds % 60]
-      .map(n => `${n}`.padStart(2, '0'))
-      .join(':');
-    const cText = this.carryOveredTimestampText;
-    return cText ? `${text} (${cText})` : text;
+  get durationText(): string {
+    const durationText = formatDuration(Math.abs(this.dur));
+
+    const { charryOveredDuration } = this;
+    if (!charryOveredDuration) return durationText;
+
+    return `${durationText} (${formatDuration(charryOveredDuration)})`;
   }
 
   get attributeValues(): (string | number | boolean)[] {
