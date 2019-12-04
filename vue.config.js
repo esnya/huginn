@@ -11,12 +11,15 @@ module.exports = {
   },
   configureWebpack: {
     plugins: [
-      new GenerateSW(),
+      new GenerateSW({
+        skipWaiting: process.env.NODE_ENV !== 'production',
+      }),
       new FaviconsWebpackPlugin({
         logo: './src/assets/icon.png',
         favicons: {
           lang: 'ja-JP',
           theme_color: '#1976d2',
+          orientation: 'portrait',
         },
       }),
     ],
